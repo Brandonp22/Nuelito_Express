@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import '../pages/myaccountspage.dart';
-import '../pages/myorderspage.dart';
 import '../pages/homepage.dart';
 
 enum NavigationEvents {
@@ -23,9 +22,6 @@ class NavigationBloc extends Bloc<NavigationEvents, NavigationStates> {
         break;
       case NavigationEvents.MyAccountClickedEvent:
         yield MyAccountsPage();
-        break;
-      case NavigationEvents.MyOrdersClickedEvent:
-        yield MyOrdersPage();
         break;
     }
   }
