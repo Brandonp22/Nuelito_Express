@@ -9,12 +9,22 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
 
-  SignUpModel signUpModel = SignUpModel();
+  String sEmail, sPassword, sNombre, sTelefono;
   GlobalKey<FormState> formkey = GlobalKey();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
+  bool save(){
+    if(formkey.currentState.validate()){
+      formkey.currentState.save();
+      return true;
+    }
+    return false;
+  }
+
   void validateandsubmit(){
-      firebaseAuth.createUserWithEmailAndPassword(email: signUpModel.sEmail, password: signUpModel.sPassword);
+    if(save()){
+      firebaseAuth.createUserWithEmailAndPassword(email: sEmail, password: sPassword);
+    }
   }
 
   @override
@@ -93,10 +103,8 @@ class _SignupPageState extends State<SignupPage> {
                                       border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                   ),
                                   child: TextFormField(
-                                    onSaved: (text)=> signUpModel.sEmail = text,
-
                                     decoration: InputDecoration(
-                                        labelText: 'Correo Electrónico BrandonHueco',
+                                        labelText: 'Correo Electrónico',
                                         labelStyle: TextStyle(
                                             fontFamily: 'Montserrat',
                                             fontWeight: FontWeight.bold,
@@ -105,6 +113,8 @@ class _SignupPageState extends State<SignupPage> {
                                         // hintStyle: ,
                                         focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(color: Colors.orange))),
+                                    validator: (value) => value.isEmpty ? '*Campo Obligatorio' : null,
+                                    onSaved: (value)=> sEmail = value,
                                   ),
                                 ),
                                 Container(
@@ -113,7 +123,6 @@ class _SignupPageState extends State<SignupPage> {
                                       border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                   ),
                                   child:  TextFormField(
-                                    onSaved: (text)=> signUpModel.sPassword = text,
                                     decoration: InputDecoration(
                                         labelText: 'Contraseña',
                                         labelStyle: TextStyle(
@@ -123,6 +132,8 @@ class _SignupPageState extends State<SignupPage> {
                                         focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(color: Colors.orange))),
                                     obscureText: true,
+                                    validator: (value) => value.isEmpty ? '*Campo Obligatorio' : null,
+                                    onSaved: (value)=> sPassword = value,
                                   ),
                                 ),
                                 Container(
@@ -148,7 +159,7 @@ class _SignupPageState extends State<SignupPage> {
                                       border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                   ),
                                   child:  TextFormField(
-                                    onSaved: (text)=> signUpModel.sNombre = text,
+                                    onSaved: (value)=> sNombre = value,
                                     decoration: InputDecoration(
                                         labelText: '¿Cómo te llamas?',
                                         labelStyle: TextStyle(
@@ -167,7 +178,7 @@ class _SignupPageState extends State<SignupPage> {
                                       border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                   ),
                                   child:  TextFormField(
-                                    onSaved: (text)=> signUpModel.sTelefono = text,
+                                    onSaved: (value)=> sTelefono = value,
                                     decoration: InputDecoration(
                                         labelText: 'Número de teléfono',
                                         labelStyle: TextStyle(
@@ -234,7 +245,6 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ),
                           )),
-
                         ],
                       ),
                     ),
@@ -249,9 +259,7 @@ class _SignupPageState extends State<SignupPage> {
   }
 }
 
-class SignUpModel{
-  String sEmail, sPassword, sNombre, sTelefono;
 
-  SignUpModel({this.sEmail, this.sPassword, this.sNombre,
-    this.sTelefono});
-}
+
+
+

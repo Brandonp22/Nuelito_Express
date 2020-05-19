@@ -49,7 +49,7 @@ class MyAccountsPage extends StatelessWidget with NavigationStates {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
 
-                        CircleAvatar(
+                      FadeAnimation(1.4, CircleAvatar(
                           child: Icon(
                             Icons.perm_identity,
                             size: 40,
@@ -57,7 +57,7 @@ class MyAccountsPage extends StatelessWidget with NavigationStates {
                           ),
                           radius: 40,
                           backgroundColor: Colors.orange[900],
-                        ),
+                        ),),
 
                         SizedBox(height: 20,),
                         FadeAnimation(1.4, Container(
