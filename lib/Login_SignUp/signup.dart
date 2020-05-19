@@ -1,6 +1,5 @@
 import 'package:nuelitoexpress/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -8,25 +7,6 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-
-  SignUpModel signUpModel = SignUpModel();
-  GlobalKey<FormState> formkey = GlobalKey();
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-
-  bool save(){
-    if(formkey.currentState.validate()){
-      formkey.currentState.save();
-      return true;
-    }
-    return false;
-}
-
-void validateandsubmit(){
-  if(save()){
-        firebaseAuth.createUserWithEmailAndPassword(email: signUpModel.sEmail, password: signUpModel.sPassword);
-  }
-}
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -43,8 +23,6 @@ void validateandsubmit(){
                 ]
             )
         ),
-        child: Form(
-          key: formkey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -102,9 +80,7 @@ void validateandsubmit(){
                                 decoration: BoxDecoration(
                                     border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                 ),
-                                child: TextFormField(
-                                  onSaved: (text)=> signUpModel.sEmail = text,
-
+                                child: TextField(
                                   decoration: InputDecoration(
                                       labelText: 'Correo Electrónico',
                                       labelStyle: TextStyle(
@@ -122,8 +98,7 @@ void validateandsubmit(){
                                 decoration: BoxDecoration(
                                     border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                 ),
-                                child:  TextFormField(
-                                  onSaved: (text)=> signUpModel.sPassword = text,
+                                child: TextField(
                                   decoration: InputDecoration(
                                       labelText: 'Contraseña',
                                       labelStyle: TextStyle(
@@ -140,7 +115,7 @@ void validateandsubmit(){
                                 decoration: BoxDecoration(
                                     border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                 ),
-                                child:  TextFormField(
+                                child: TextField(
                                   decoration: InputDecoration(
                                       labelText: 'Confirmar contraseña',
                                       labelStyle: TextStyle(
@@ -157,8 +132,7 @@ void validateandsubmit(){
                                 decoration: BoxDecoration(
                                     border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                 ),
-                                child:  TextFormField(
-                                  onSaved: (text)=> signUpModel.sNombre = text,
+                                child: TextField(
                                   decoration: InputDecoration(
                                       labelText: '¿Cómo te llamas?',
                                       labelStyle: TextStyle(
@@ -176,8 +150,7 @@ void validateandsubmit(){
                                 decoration: BoxDecoration(
                                     border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                 ),
-                                child:  TextFormField(
-                                  onSaved: (text)=> signUpModel.sTelefono = text,
+                                child: TextField(
                                   decoration: InputDecoration(
                                       labelText: 'Número de teléfono',
                                       labelStyle: TextStyle(
@@ -203,7 +176,7 @@ void validateandsubmit(){
                               color: Colors.orange[900],
                               elevation: 7.0,
                               child: GestureDetector(
-                                onTap: validateandsubmit,
+                                onTap: () {},
                                 child: Center(
                                   child: Text(
                                     'REGISTRARSE',
@@ -252,14 +225,6 @@ void validateandsubmit(){
           ],
         ),
       ),
-      ),
     );
   }
-}
-
-class SignUpModel{
-  String sEmail, sPassword, sNombre, sTelefono;
-
-  SignUpModel({this.sEmail, this.sPassword, this.sNombre,
-      this.sTelefono});
 }
