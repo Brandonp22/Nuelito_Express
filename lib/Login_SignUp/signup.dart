@@ -106,7 +106,7 @@ void validateandsubmit(){
                                   onSaved: (text)=> signUpModel.sEmail = text,
 
                                   decoration: InputDecoration(
-                                      labelText: 'Correo Electrónico',
+                                      labelText: 'Correo Electrónico BrandonHueco',
                                       labelStyle: TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.bold,
