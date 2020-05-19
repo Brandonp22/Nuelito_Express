@@ -82,7 +82,7 @@ class _SignupPageState extends State<SignupPage> {
                                 ),
                                 child: TextField(
                                   decoration: InputDecoration(
-                                      labelText: 'Correo Electrónico',
+                                      labelText: 'Correo Electrónico BrandonHueco',
                                       labelStyle: TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.bold,
