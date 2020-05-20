@@ -6,7 +6,7 @@ import 'package:nuelitoexpress/bloc/listTileColorBloc.dart';
 import 'cart.dart';
 import 'package:nuelitoexpress/model/food_item.dart';
 
-
+var nameList = fooditemList;
 class HomePage extends StatelessWidget with NavigationStates{
   @override
   Widget build(BuildContext context) {
@@ -35,12 +35,12 @@ class HomePageBuild extends StatelessWidget {
               children: <Widget>[
                 FirstHalf(),
                 SizedBox(height: 45),
-                for (var foodItem in fooditemList.foodItems)
-                  Builder(
-                    builder: (context) {
-                      return ItemContainer(foodItem: foodItem);
-                    },
-                  )
+              for (var foodItem in nameList.foodItems)
+                Builder(
+                  builder: (context) {
+                  return ItemContainer(foodItem: foodItem);
+                },
+               ),
               ],
             ),
           )),
@@ -115,18 +115,33 @@ class FirstHalf extends StatelessWidget {
   }
 }
 
+/*@override
+Future<Stream<dynamic>> refresh() async{
+  print('2');
+  home: HomePageBuild();
+  print('3');
+}*/
+
 Widget categories() {
   return Container(
     height: 185,
     child: ListView(
       scrollDirection: Axis.horizontal,
       children: <Widget>[
-        CategoryListItem(
-          categoryIcon: Icons.bug_report,
+        InkWell(
+          onTap: (){
+            nameList = fooditemListdos;
+            print('0');
+            //refresh();
+            print('1');
+          },
+        child: CategoryListItem(
+          categoryIcon: Icons.local_pizza,
           categoryName: "Subway",
           availability: 12,
-          selected: true,
-        ),
+          selected: false,
+        ),),
+
         CategoryListItem(
           categoryIcon: Icons.bug_report,
           categoryName: "Mc Donald",

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 FooditemList fooditemList = FooditemList(foodItems: [
@@ -38,14 +39,17 @@ FooditemList fooditemList = FooditemList(foodItems: [
     price: 2.49,
     imgUrl: "https://pbs.twimg.com/media/D3q-h3cWwAEGici.jpg",
   ),
+]);
+
+FooditemList fooditemListdos = FooditemList(foodItems: [
   FoodItem(
     id: 6,
     title: "Pan Francés",
     hotel: "Panaderia Chigna",
     price: 0.99,
     imgUrl:
-        "https://scontent.fymy1-1.fna.fbcdn.net/v/t1.0-9/s720x720/78537353_2561377834187392_1274909210152271872_o.jpg?_nc_cat=107&_nc_sid=8024bb&_nc_ohc=u1Kl109WhKEAX9q-YRk&_nc_ht=scontent.fymy1-1.fna&_nc_tp=7&oh=d9de4f8144ff259a84c44ce902f8d607&oe=5ECB9B56",
-  ),
+    "https://scontent.fymy1-1.fna.fbcdn.net/v/t1.0-9/s720x720/78537353_2561377834187392_1274909210152271872_o.jpg?_nc_cat=107&_nc_sid=8024bb&_nc_ohc=u1Kl109WhKEAX9q-YRk&_nc_ht=scontent.fymy1-1.fna&_nc_tp=7&oh=d9de4f8144ff259a84c44ce902f8d607&oe=5ECB9B56",
+ ),
   FoodItem(
     id: 7,
     title: "Servicios Funebres",
@@ -54,11 +58,12 @@ FooditemList fooditemList = FooditemList(foodItems: [
     imgUrl:
     "https://us.123rf.com/450wm/nelson99/nelson991711/nelson99171100649/90803964-primer-disparo-de-un-ataúd-colorido-en-un-coche-fúnebre-o-capilla-antes-del-funeral-o-entierro-en-el-cemente.jpg?ver=6",
   ),
+
 ]);
+
 
 class FooditemList {
   List<FoodItem> foodItems;
-
   FooditemList({@required this.foodItems});
 }
 

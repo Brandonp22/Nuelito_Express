@@ -235,8 +235,7 @@ class _SignupPageState extends State<SignupPage> {
                                 onTap: () {
                                   Navigator.of(context).pop();
                                 },
-                                child:
-                                Center(
+                                child: Center(
                                   child: Text('Regresar',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
