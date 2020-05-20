@@ -20,6 +20,9 @@ class HomePage extends StatelessWidget with NavigationStates{
         title: "Nuelito Express",
         home: HomePageBuild(),
         debugShowCheckedModeBanner: false,
+        routes: <String, WidgetBuilder>{
+          '/refresh': (BuildContext context) => new HomePageBuild(),
+        },
       ),
     );
   }
@@ -115,60 +118,61 @@ class FirstHalf extends StatelessWidget {
   }
 }
 
-/*@override
-Future<Stream<dynamic>> refresh() async{
-  print('2');
-  home: HomePageBuild();
-  print('3');
-}*/
+class categories extends StatelessWidget {
+  @override
+  Widget build(BuildContext context){
+    return Container(
+      height: 185,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: <Widget>[
 
-Widget categories() {
-  return Container(
-    height: 185,
-    child: ListView(
-      scrollDirection: Axis.horizontal,
-      children: <Widget>[
-        InkWell(
-          onTap: (){
-            nameList = fooditemListdos;
-            print('0');
-            //refresh();
-            print('1');
-          },
-        child: CategoryListItem(
-          categoryIcon: Icons.local_pizza,
-          categoryName: "Subway",
-          availability: 12,
-          selected: false,
-        ),),
+          InkWell(
+            onTap: () {
+              nameList = fooditemList;
+              Navigator.of(context).pushNamed('/refresh');
+            },
+            child: CategoryListItem(
+              categoryIcon: Icons.local_pizza,
+              categoryName: "Subway",
+              availability: 12,
+              selected: false,
+            ),),
 
-        CategoryListItem(
-          categoryIcon: Icons.bug_report,
-          categoryName: "Mc Donald",
-          availability: 12,
-          selected: false,
-        ),
-        CategoryListItem(
-          categoryIcon: Icons.bug_report,
-          categoryName: "Burger King",
-          availability: 12,
-          selected: false,
-        ),
-        CategoryListItem(
-          categoryIcon: Icons.bug_report,
-          categoryName: "Pollo Campero",
-          availability: 12,
-          selected: false,
-        ),
-        CategoryListItem(
-          categoryIcon: Icons.bug_report,
-          categoryName: "Taco Bell",
-          availability: 12,
-          selected: false,
-        ),
-      ],
-    ),
-  );
+          InkWell(
+            onTap: () {
+              nameList = fooditemListdos;
+              Navigator.of(context).pushNamed('/refresh');
+            },
+            child: CategoryListItem(
+              categoryIcon: Icons.bug_report,
+              categoryName: "Mc Donald",
+              availability: 12,
+              selected: false,
+            ),),
+
+          CategoryListItem(
+            categoryIcon: Icons.bug_report,
+            categoryName: "Burger King",
+            availability: 12,
+            selected: false,
+          ),
+          CategoryListItem(
+            categoryIcon: Icons.bug_report,
+            categoryName: "Pollo Campero",
+            availability: 12,
+            selected: false,
+          ),
+          CategoryListItem(
+            categoryIcon: Icons.bug_report,
+            categoryName: "Taco Bell",
+            availability: 12,
+            selected: false,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class Items extends StatelessWidget {

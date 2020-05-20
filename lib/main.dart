@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Login_SignUp/login.dart';
 import 'Login_SignUp/signup.dart';
-
 import 'sidebar/sidebar_layout.dart';
 
 void main() => runApp(

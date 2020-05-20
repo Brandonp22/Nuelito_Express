@@ -1,6 +1,7 @@
 import 'package:nuelitoexpress/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class _SignupPageState extends State<SignupPage> {
 
   String sEmail, sPassword, sNombre, sTelefono;
   GlobalKey<FormState> formkey = GlobalKey();
+  final firestoreInstance = Firestore.instance;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   bool save(){
@@ -21,9 +23,19 @@ class _SignupPageState extends State<SignupPage> {
     return false;
   }
 
-  void validateandsubmit(){
-    if(save()){
-      firebaseAuth.createUserWithEmailAndPassword(email: sEmail, password: sPassword);
+  void validateandsubmit () {
+    if (save()) {
+      firebaseAuth.createUserWithEmailAndPassword(
+          email: sEmail, password: sPassword)
+          .then((result) {
+        firestoreInstance.collection('Usuarios')
+            .document(result.user.uid)
+            .setData(
+            {'Email': sEmail,
+              'Nombre': sNombre,
+              'Telefono': sTelefono
+            });
+      });
     }
   }
 
@@ -159,7 +171,6 @@ class _SignupPageState extends State<SignupPage> {
                                       border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                   ),
                                   child:  TextFormField(
-                                    onSaved: (value)=> sNombre = value,
                                     decoration: InputDecoration(
                                         labelText: '¿Cómo te llamas?',
                                         labelStyle: TextStyle(
@@ -170,6 +181,8 @@ class _SignupPageState extends State<SignupPage> {
                                         // hintStyle: ,
                                         focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(color: Colors.orange))),
+                                    validator: (value) => value.isEmpty ? '*Campo Obligatorio' : null,
+                                    onSaved: (value)=> sNombre = value,
                                   ),
                                 ),
                                 Container(
@@ -178,7 +191,6 @@ class _SignupPageState extends State<SignupPage> {
                                       border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                   ),
                                   child:  TextFormField(
-                                    onSaved: (value)=> sTelefono = value,
                                     decoration: InputDecoration(
                                         labelText: 'Número de teléfono',
                                         labelStyle: TextStyle(
@@ -189,6 +201,8 @@ class _SignupPageState extends State<SignupPage> {
                                         // hintStyle: ,
                                         focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(color: Colors.orange))),
+                                    validator: (value) => value.isEmpty ? '*Campo Obligatorio' : null,
+                                    onSaved: (value)=> sTelefono = value,
                                   ),
                                 ),
                               ],
