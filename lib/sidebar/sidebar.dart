@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nuelitoexpress/bloc.navigation_bloc/naviation_bloc.dart';
@@ -6,6 +7,9 @@ import 'package:rxdart/rxdart.dart';
 import '../sidebar/menu_item.dart';
 
 class SideBar extends StatefulWidget {
+  const SideBar({Key key, this.user}) : super(key: key);
+  final FirebaseUser user;
+
   @override
   _SideBarState createState() => _SideBarState();
 }
@@ -74,11 +78,11 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                       ),
                       ListTile(
                         title: Text(
-                          "Brandon Pineda",
+                          "${widget.user.email}",
                           style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w800),
                         ),
                         subtitle: Text(
-                          "brandonpineda4@gmail.com",
+                          "${widget.user.email}",
                           style: TextStyle(
                             color: Color.fromRGBO(255,224,130 ,1),
                             fontSize: 15,

@@ -15,30 +15,6 @@ class _SignupPageState extends State<SignupPage> {
   final firestoreInstance = Firestore.instance;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  bool save(){
-    if(formkey.currentState.validate()){
-      formkey.currentState.save();
-      return true;
-    }
-    return false;
-  }
-
-  void validateandsubmit () {
-    if (save()) {
-      firebaseAuth.createUserWithEmailAndPassword(
-          email: sEmail, password: sPassword)
-          .then((result) {
-        firestoreInstance.collection('Usuarios')
-            .document(result.user.uid)
-            .setData(
-            {'Email': sEmail,
-              'Nombre': sNombre,
-              'Telefono': sTelefono
-            });
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -219,7 +195,7 @@ class _SignupPageState extends State<SignupPage> {
                                 elevation: 7.0,
                                   child: InkWell(
                                     onTap: () {
-                                    validateandsubmit();
+                                      signUp();
                                   },
                                   child: Center(
                                     child: Text(
@@ -269,6 +245,28 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
     );
+  }
+
+  void signUp(){
+    if(formkey.currentState.validate()){
+      formkey.currentState.save();
+      try{
+        firebaseAuth.createUserWithEmailAndPassword(
+            email: sEmail, password: sPassword)
+            .then((result) {
+          firestoreInstance.collection('Usuarios')
+              .document(result.user.uid)
+              .setData(
+              {'Email': sEmail,
+                'Nombre': sNombre,
+                'Telefono': sTelefono
+              });
+        });
+        //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+      }catch(e){
+        print(e.message);
+      }
+    }
   }
 }
 

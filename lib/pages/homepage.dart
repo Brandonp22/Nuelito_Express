@@ -118,7 +118,8 @@ class FirstHalf extends StatelessWidget {
   }
 }
 
-class categories extends StatelessWidget {
+class categories extends CategoryListItem {
+  final selected=false;
   @override
   Widget build(BuildContext context){
     return Container(
@@ -135,38 +136,43 @@ class categories extends StatelessWidget {
             child: CategoryListItem(
               categoryIcon: Icons.local_pizza,
               categoryName: "Subway",
-              availability: 12,
-              selected: false,
+              selected: true,
             ),),
 
           InkWell(
             onTap: () {
               nameList = fooditemListdos;
               Navigator.of(context).pushNamed('/refresh');
+              final selected=true;
             },
             child: CategoryListItem(
               categoryIcon: Icons.bug_report,
               categoryName: "Mc Donald",
-              availability: 12,
-              selected: false,
+              selected: ?,
             ),),
+
+          Container (
+            child: InkWell(
+              onTap: () {
+                nameList = fooditemListdos;
+                Navigator.of(context).pushNamed('/refresh');
+                final selected=true;
+              },
+          child: CategoryListItem(
+            categoryIcon: Icons.bug_report,
+            categoryName: "Burger King",
+            selected: false,
+          ),
+          ),),
 
           CategoryListItem(
             categoryIcon: Icons.bug_report,
-            categoryName: "Burger King",
-            availability: 12,
-            selected: false,
-          ),
-          CategoryListItem(
-            categoryIcon: Icons.bug_report,
             categoryName: "Pollo Campero",
-            availability: 12,
             selected: false,
           ),
           CategoryListItem(
             categoryIcon: Icons.bug_report,
             categoryName: "Taco Bell",
-            availability: 12,
             selected: false,
           ),
         ],
@@ -280,13 +286,11 @@ class CategoryListItem extends StatelessWidget {
     Key key,
     @required this.categoryIcon,
     @required this.categoryName,
-    @required this.availability,
     @required this.selected,
   }) : super(key: key);
 
   final IconData categoryIcon;
   final String categoryName;
-  final int availability;
   final bool selected;
 
   @override
@@ -338,13 +342,6 @@ class CategoryListItem extends StatelessWidget {
             height: 15,
             color: Colors.black26,
           ),
-          Text(
-            availability.toString(),
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          )
         ],
       ),
     );
