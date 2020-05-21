@@ -1,13 +1,15 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nuelitoexpress/bloc.navigation_bloc/naviation_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import '../sidebar/menu_item.dart';
+import 'package:nuelitoexpress/model/user_data.dart';
 
 class SideBar extends StatefulWidget {
-  const SideBar({Key key, this.user}) : super(key: key);
+  SideBar({Key key, this.user}) : super(key: key);
   final FirebaseUser user;
 
   @override
@@ -15,6 +17,7 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<SideBar> {
+
   AnimationController _animationController;
   StreamController<bool> isSidebarOpenedStreamController;
   Stream<bool> isSidebarOpenedStream;
@@ -76,27 +79,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                       SizedBox(
                         height: 100,
                       ),
-                      ListTile(
-                        title: Text(
-                          "${widget.user.email}",
-                          style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w800),
-                        ),
-                        subtitle: Text(
-                          "${widget.user.email}",
-                          style: TextStyle(
-                            color: Color.fromRGBO(255,224,130 ,1),
-                            fontSize: 15,
-                          ),
-                        ),
-                        leading: CircleAvatar(
-                          child: Icon(
-                            Icons.perm_identity,
-                            color: Colors.white,
-                          ),
-                          radius: 40,
-                          backgroundColor: Color.fromRGBO(255,224,130 ,1),
-                        ),
-                      ),
+                      UserData(user: widget.user),
                       Divider(
                         height: 64,
                         thickness: 0.5,
@@ -190,3 +173,5 @@ class CustomMenuClipper extends CustomClipper<Path> {
     return true;
   }
 }
+
+

@@ -259,7 +259,8 @@ class _SignupPageState extends State<SignupPage> {
               .setData(
               {'Email': sEmail,
                 'Nombre': sNombre,
-                'Telefono': sTelefono
+                'Telefono': sTelefono,
+                'uid': result.user.uid
               });
         });
         //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));

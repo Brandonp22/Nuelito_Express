@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 FooditemList fooditemList = FooditemList(foodItems: [
   FoodItem(
     id: 1,
-    title: "José Díaz",
-    hotel: "Carlos Díaz",
-    price: 4.99,
+    title: "Titiman",
+    hotel: "Esdras Chigna",
+    price: 0.01,
     imgUrl:
-        "https://firebasestorage.googleapis.com/v0/b/pruebaventa-e4e3b.appspot.com/o/FotosProductos%2Fjosediaz.jpg?alt=media&token=bb6e3337-9c6d-4349-95c2-73c48346b4a7",
+        "https://media.discordapp.net/attachments/555937919664390154/712802863725805578/WhatsApp_Image_2020-05-14_at_8.27.37_AM.jpeg?width=527&height=677",
   ),
   FoodItem(
     id: 2,

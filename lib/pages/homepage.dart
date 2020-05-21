@@ -118,8 +118,7 @@ class FirstHalf extends StatelessWidget {
   }
 }
 
-class categories extends CategoryListItem {
-  final selected=false;
+class categories extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Container(
@@ -127,54 +126,29 @@ class categories extends CategoryListItem {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
-
           InkWell(
             onTap: () {
               nameList = fooditemList;
               Navigator.of(context).pushNamed('/refresh');
             },
             child: CategoryListItem(
-              categoryIcon: Icons.local_pizza,
+              imgUrl:
+              "https://firebasestorage.googleapis.com/v0/b/nuelito-927e8.appspot.com/o/FotosNegocios%2Fsubwayr-restaurants-reveals-bold-new-logo-and-symbol-null-hr.jpg?alt=media&token=f0f84c31-1572-4296-ab6b-20c177ff4475",
               categoryName: "Subway",
-              selected: true,
+              selected: false,
             ),),
 
           InkWell(
             onTap: () {
               nameList = fooditemListdos;
               Navigator.of(context).pushNamed('/refresh');
-              final selected=true;
             },
             child: CategoryListItem(
-              categoryIcon: Icons.bug_report,
+              imgUrl:
+              "https://firebasestorage.googleapis.com/v0/b/nuelito-927e8.appspot.com/o/FotosNegocios%2Fsubwayr-restaurants-reveals-bold-new-logo-and-symbol-null-hr.jpg?alt=media&token=f0f84c31-1572-4296-ab6b-20c177ff4475",
               categoryName: "Mc Donald",
-              selected: ?,
+              selected: false,
             ),),
-
-          Container (
-            child: InkWell(
-              onTap: () {
-                nameList = fooditemListdos;
-                Navigator.of(context).pushNamed('/refresh');
-                final selected=true;
-              },
-          child: CategoryListItem(
-            categoryIcon: Icons.bug_report,
-            categoryName: "Burger King",
-            selected: false,
-          ),
-          ),),
-
-          CategoryListItem(
-            categoryIcon: Icons.bug_report,
-            categoryName: "Pollo Campero",
-            selected: false,
-          ),
-          CategoryListItem(
-            categoryIcon: Icons.bug_report,
-            categoryName: "Taco Bell",
-            selected: false,
-          ),
         ],
       ),
     );
@@ -284,12 +258,12 @@ class Items extends StatelessWidget {
 class CategoryListItem extends StatelessWidget {
   const CategoryListItem({
     Key key,
-    @required this.categoryIcon,
+    @required this.imgUrl,
     @required this.categoryName,
     @required this.selected,
   }) : super(key: key);
 
-  final IconData categoryIcon;
+  final String imgUrl;
   final String categoryName;
   final bool selected;
 
@@ -324,23 +298,29 @@ class CategoryListItem extends StatelessWidget {
                 border: Border.all(
                     color: selected ? Colors.transparent : Colors.grey[200],
                     width: 1.5)),
-            child: Icon(
-              categoryIcon,
-              color: Colors.black,
-              size: 30,
+              child: Image.network(
+                imgUrl,
+                fit: BoxFit.fill,
+                height: 30,
+              ),
             ),
-          ),
+          /*Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(50),
+                border: Border.all(
+                    color: selected ? Colors.transparent : Colors.grey[200],
+                    width: 1.5)),
+            child: Image.network(
+              imgUrl,
+            ),
+          ),*/
           SizedBox(height: 10),
           Text(
             categoryName,
             style: TextStyle(
                 fontWeight: FontWeight.w700, color: Colors.black, fontSize: 15),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 6, 0, 10),
-            width: 1.5,
-            height: 15,
-            color: Colors.black26,
           ),
         ],
       ),

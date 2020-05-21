@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nuelitoexpress/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
+import 'package:nuelitoexpress/model/user_data.dart';
 import 'package:nuelitoexpress/sidebar/sidebar_layout.dart';
 
 class LoginPage extends StatefulWidget {
@@ -169,6 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: InkWell(
                                   onTap: () {
                                     signIn();
+                                    //Navigator.push(context, MaterialPageRoute(builder: (context) => SideBarLayout()));
                                   },
                                   child: Center(
                                     child: Text(
@@ -230,6 +233,7 @@ class _LoginPageState extends State<LoginPage> {
        FirebaseUser user = (await firebaseAuth
            .signInWithEmailAndPassword(email: lEmail, password: lPassword)).user;
        Navigator.push(context, MaterialPageRoute(builder: (context) => SideBarLayout(user: user)));
+       //Navigator.push(context, MaterialPageRoute(builder: (context) => UserData(user: user)));
      } catch (e) {
      }
    }
