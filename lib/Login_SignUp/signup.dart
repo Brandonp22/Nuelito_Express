@@ -1,7 +1,9 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nuelitoexpress/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nuelitoexpress/Login_SignUp/login.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -262,8 +264,18 @@ class _SignupPageState extends State<SignupPage> {
                 'Telefono': sTelefono,
                 'uid': result.user.uid
               });
+          result.user.sendEmailVerification();
         });
-        //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+        Fluttertoast.showToast(
+            msg: "Hemos enviado un correo de confirmación a tu cuenta.",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green[700],
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
       }catch(e){
         print(e.message);
       }

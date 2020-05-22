@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nuelitoexpress/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
-import 'package:nuelitoexpress/model/user_data.dart';
 import 'package:nuelitoexpress/sidebar/sidebar_layout.dart';
 
 class LoginPage extends StatefulWidget {
@@ -111,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 color: Colors.orange))),
                                     validator: (input) =>
                                     input.isEmpty
-                                        ? 'Email no puede estar vacío'
+                                        ? '*Email no puede estar vacío'
                                         : null,
                                        onSaved: (input) => lEmail = input,
                                   ),
@@ -135,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                                     obscureText: true,
                                     validator: (input) =>
                                     input.isEmpty
-                                        ? '*Campo Obligatorio'
+                                        ? '*Contraseña no puede estar vacío'
                                         : null,
                                        onSaved: (input) => lPassword = input,
                                   ),
@@ -229,14 +228,40 @@ class _LoginPageState extends State<LoginPage> {
    final formstate = _formKey.currentState;
    if (formstate.validate()) {
      formstate.save();
-     try {
-       FirebaseUser user = (await firebaseAuth
-           .signInWithEmailAndPassword(email: lEmail, password: lPassword)).user;
-       Navigator.push(context, MaterialPageRoute(builder: (context) => SideBarLayout(user: user)));
-       //Navigator.push(context, MaterialPageRoute(builder: (context) => UserData(user: user)));
-     } catch (e) {
+
+    // FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+       try {
+         FirebaseUser user = (await firebaseAuth
+             .signInWithEmailAndPassword(email: lEmail, password: lPassword)).user;
+
+         if(!user.isEmailVerified){
+           Fluttertoast.showToast(
+               msg: "Debes verificar tu cuenta.",
+               toastLength: Toast.LENGTH_LONG,
+               gravity: ToastGravity.BOTTOM,
+               timeInSecForIosWeb: 1,
+               backgroundColor: Colors.red,
+               textColor: Colors.white,
+               fontSize: 16.0
+           );
+         }else {
+           Navigator.push(context, MaterialPageRoute(
+               builder: (context) => SideBarLayout(user: user)));
+           //Navigator.push(context, MaterialPageRoute(builder: (context) => UserData(user: user)));
+         }
+       } catch (e) {
+         Fluttertoast.showToast(
+             msg: "Nombre de usuario o contraseña incorrectos.",
+             toastLength: Toast.LENGTH_LONG,
+             gravity: ToastGravity.BOTTOM,
+             timeInSecForIosWeb: 1,
+             backgroundColor: Colors.red,
+             textColor: Colors.white,
+             fontSize: 16.0
+         );
+       }
      }
    }
  }
 
-}
