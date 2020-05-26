@@ -1,13 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nuelitoexpress/Animation/FadeAnimation.dart';
 import 'package:nuelitoexpress/bloc.navigation_bloc/naviation_bloc.dart';
 
 class MyAccountsPage extends StatelessWidget with NavigationStates {
+  final FirebaseUser user;
+  const MyAccountsPage({Key key, this.user}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      body: Container(
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: Firestore.instance
+            .collection('Usuarios')
+            .document(user.uid)
+            .snapshots(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+      return Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -76,7 +88,7 @@ class MyAccountsPage extends StatelessWidget with NavigationStates {
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey),
-                                      // hintText: 'EMAIL',
+                                          hintText: '${snapshot.data['Nombre']}',
                                       // hintStyle: ,
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
@@ -92,7 +104,7 @@ class MyAccountsPage extends StatelessWidget with NavigationStates {
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey),
-                                      // hintText: 'EMAIL',
+                                          hintText: '${snapshot.data['Email']}',
                                       // hintStyle: ,
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
@@ -112,55 +124,16 @@ class MyAccountsPage extends StatelessWidget with NavigationStates {
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey),
-                                      // hintText: 'EMAIL',
+                                          hintText: '${snapshot.data['Telefono']}',
                                       // hintStyle: ,
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.orange))),
                                 ),
                               ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(
-                                        color: Colors.grey[200]))
-                                ),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      labelText: 'Contraseña',
-                                      labelStyle: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey),
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.orange))),
-                                  obscureText: true,
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(
-                                        color: Colors.grey[200]))
-                                ),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      labelText: 'Confirmar contraseña',
-                                      labelStyle: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey),
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.orange))),
-                                  obscureText: true,
-                                ),
-                              ),
                             ],
                           ),
                         )),
-
                         SizedBox(height: 50.0),
                         FadeAnimation(1.6, Container(
                             height: 40.0,
@@ -190,7 +163,9 @@ class MyAccountsPage extends StatelessWidget with NavigationStates {
             )
           ],
         ),
-      ),
+      );
+    },
+    ),
     );
   }
 }

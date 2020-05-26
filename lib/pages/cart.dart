@@ -1,11 +1,19 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nuelitoexpress/bloc/cartlistBloc.dart';
 import 'package:nuelitoexpress/bloc/listTileColorBloc.dart';
 import 'package:nuelitoexpress/model/food_item.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:nuelitoexpress/pages/homepage.dart';
 
 class Cart extends StatelessWidget {
+  Cart({Key key, this.user}) : super(key: key);
+  final FirebaseUser user;
+
   @override
   Widget build(BuildContext context) {
     final CartListBloc bloc = BlocProvider.getBloc<CartListBloc>();
@@ -19,7 +27,7 @@ class Cart extends StatelessWidget {
             body: SafeArea(
               child: CartBody(foodItems),
             ),
-            bottomNavigationBar: BottomBar(foodItems),
+            bottomNavigationBar: BottomBar(foodItems, user),
           );
         } else {
           return Container(
@@ -32,23 +40,22 @@ class Cart extends StatelessWidget {
 }
 
 class BottomBar extends StatelessWidget {
+  final FirebaseUser user;
   final List<FoodItem> foodItems;
+  final firestoreInstance = Firestore.instance;
 
-  BottomBar(this.foodItems);
+  BottomBar(this.foodItems, this.user);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+
       margin: EdgeInsets.only(left: 35, bottom: 25),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           totalAmount(foodItems),
-          Divider(
-            height: 1,
-            color: Colors.grey[700],
-          ),
-          nextButtonBar(),
+          nextButtonBar(foodItems),
         ],
       ),
     );
@@ -83,16 +90,21 @@ class BottomBar extends StatelessWidget {
     return totalAmount.toStringAsFixed(2);
   }
 
-  Container nextButtonBar() {
+  Container nextButtonBar(List<FoodItem> foodItems) {
     return Container(
       margin: EdgeInsets.only(right: 25),
       padding: EdgeInsets.all(25),
       decoration: BoxDecoration(
           color: Colors.orange[900], borderRadius: BorderRadius.circular(15)),
+        child: InkWell(
+        onTap: () {
+          print("Hola");
+          returnCart();
+    },
       child: Row(
         children: <Widget>[
           Text(
-            "15-25 min",
+            "20-30 min",
             style: TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 14,
@@ -100,7 +112,7 @@ class BottomBar extends StatelessWidget {
           ),
           Spacer(),
           Text(
-            "Siguiente",
+            "Confirmar Orden",
             style: TextStyle(
               fontWeight: FontWeight.w900,
               fontSize: 16,
@@ -108,7 +120,58 @@ class BottomBar extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
+  }
+
+  String _latitude;
+  String _longitude;
+  Future<String> returnLocation() async {
+    final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    _latitude = "${position.latitude}";
+    _longitude = "${position.longitude}";
+  }
+
+  Future<String>returnCart() async{
+    List<String> productsFB = new List();
+    String cartFB;
+    for (int i = 0; i < foodItems.length; i++) {
+      cartFB =
+          foodItems[i].quantity.toString() + " x " + foodItems[i].title + "\n";
+      productsFB.add(cartFB);
+    }
+    returnLocation();
+    if (_latitude != null && _longitude != null){
+      firestoreInstance.collection('Pedidos').add({
+        //'Nombre': snapshot.data['Nombre'],
+        //'Telefono': snapshot.data['Telefono'],
+        'Productos': productsFB,
+        'Total': returnTotalAmount(foodItems),
+        'Longitud': _longitude,
+        'Latitud': _latitude,
+      });
+      Fluttertoast.showToast(
+          msg: "Tu pedido se ha realizado con éxito.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green[700],
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+      ///
+    } else {
+      Fluttertoast.showToast(
+          msg: "Hubo un problema con localizar tu ubicacion, intenta de nuevo.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
   }
 }
 
@@ -202,10 +265,10 @@ class CartListItem extends StatelessWidget {
       feedback: DraggableChildFeedback(foodItem: foodItem),
       child: DraggableChild(foodItem: foodItem),
       childWhenDragging: foodItem.quantity > 1 ? DraggableChild(foodItem: foodItem) : Container(),
-      
     );
   }
 }
+
 
 class DraggableChild extends StatelessWidget {
   const DraggableChild({
@@ -363,7 +426,7 @@ class _DragTargetWidgetState extends State<DragTargetWidget> {
         colorBloc.setColor(Colors.red);
         return true;
       },
-     /* onLeave: (FoodItem foodItem) {
+     /*onLeave: (FoodItem foodItem) {
         colorBloc.setColor(Colors.white);
       },*/
       

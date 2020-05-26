@@ -58,7 +58,6 @@ FooditemList fooditemListdos = FooditemList(foodItems: [
     imgUrl:
     "https://us.123rf.com/450wm/nelson99/nelson991711/nelson99171100649/90803964-primer-disparo-de-un-ataúd-colorido-en-un-coche-fúnebre-o-capilla-antes-del-funeral-o-entierro-en-el-cemente.jpg?ver=6",
   ),
-
 ]);
 
 

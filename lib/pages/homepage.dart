@@ -1,4 +1,5 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nuelitoexpress/bloc.navigation_bloc/naviation_bloc.dart';
 import 'package:nuelitoexpress/bloc/cartlistBloc.dart';
@@ -8,6 +9,10 @@ import 'package:nuelitoexpress/model/food_item.dart';
 
 var nameList = fooditemList;
 class HomePage extends StatelessWidget with NavigationStates{
+  final FirebaseUser user;
+  const HomePage({Key key, this.user}) : super(key: key);
+
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -18,10 +23,10 @@ class HomePage extends StatelessWidget with NavigationStates{
       ],
       child: MaterialApp(
         title: "Nuelito Express",
-        home: HomePageBuild(),
+        home: HomePageBuild(user),
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
-          '/refresh': (BuildContext context) => new HomePageBuild(),
+          '/refresh': (BuildContext context) => new HomePageBuild(user),
         },
       ),
     );
@@ -29,6 +34,9 @@ class HomePage extends StatelessWidget with NavigationStates{
 }
 
 class HomePageBuild extends StatelessWidget {
+  final FirebaseUser user;
+  HomePageBuild(this.user);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +44,7 @@ class HomePageBuild extends StatelessWidget {
           child: Container(
             child: ListView(
               children: <Widget>[
-                FirstHalf(),
+                FirstHalf(user: user),
                 SizedBox(height: 45),
               for (var foodItem in nameList.foodItems)
                 Builder(
@@ -94,9 +102,8 @@ class ItemContainer extends StatelessWidget {
 }
 
 class FirstHalf extends StatelessWidget {
-  const FirstHalf({
-    Key key,
-  }) : super(key: key);
+  const FirstHalf({Key key,this.user}) : super(key: key);
+  final FirebaseUser user;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +111,7 @@ class FirstHalf extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(35, 25, 0, 0),
       child: Column(
         children: <Widget>[
-          CustomAppBar(),
+          CustomAppBar(user),
           //you could also use the spacer widget to give uneven distances, i just decided to go with a sizebox
           SizedBox(height: 30),
           title(),
@@ -382,6 +389,9 @@ Widget title() {
 }
 
 class CustomAppBar extends StatelessWidget {
+  final FirebaseUser user;
+  CustomAppBar(this.user);
+
   @override
   Widget build(BuildContext context) {
     final CartListBloc bloc = BlocProvider.getBloc<CartListBloc>();
@@ -409,9 +419,9 @@ class CustomAppBar extends StatelessWidget {
       int length, BuildContext context, List<FoodItem> foodItems) {
     return GestureDetector(
       onTap: () {
-        if (length > 0) {
+        if (length >= 0) {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => Cart()));
+              MaterialPageRoute(builder: (context) => Cart(user: user)));
         } else {
           return;
         }

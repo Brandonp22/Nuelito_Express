@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nuelitoexpress/Login_SignUp/login.dart';
 import 'package:nuelitoexpress/bloc.navigation_bloc/naviation_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import '../sidebar/menu_item.dart';
@@ -71,6 +72,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
           child: Row(
             children: <Widget>[
               Expanded(
+                child: WillPopScope(
+                    onWillPop: signOutDialog,
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   color: Colors.orange[900],
@@ -100,6 +103,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         title: "Mi Cuenta",
                         onTap: () {
                           onIconPressed();
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => MyAccountsPage(user: widget.user)));
                           BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyAccountClickedEvent);
                         },
                       ),
@@ -113,10 +117,35 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                       MenuItem(
                         icon: Icons.exit_to_app,
                         title: "Cerrar Sesión",
+                        onTap: () {
+                          onIconPressed();
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => AlertDialog(
+                              title: Text("¿Cerrar Sesión?"),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text("Sí"),
+                                  onPressed: (){
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text("No"),
+                                  onPressed: (){
+                                    Navigator.of(context).pop("Cancel");
+                                  },
+                                ),
+                              ],
+                              elevation: 24.0,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
-                ),
+                ),),
               ),
               Align(
                 alignment: Alignment(0, -0.9),
@@ -147,7 +176,32 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
       },
     );
   }
+  Future<bool> signOutDialog(){
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("SALIR"),
+        content: Text("¿Estás seguro de que quieres salir de Nuelito Express? "),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Sí"),
+            onPressed: (){
+              exit(0);
+            },
+          ),
+          FlatButton(
+            child: Text("No"),
+            onPressed: (){
+              Navigator.of(context).pop(false);
+            },
+          ),
+        ],
+        elevation: 24.0,
+      ),
+    );
+  }
 }
+
 
 class CustomMenuClipper extends CustomClipper<Path> {
   @override

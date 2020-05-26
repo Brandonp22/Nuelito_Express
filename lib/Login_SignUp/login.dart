@@ -169,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                                 elevation: 7.0,
                                 child: InkWell(
                                   onTap: () {
-                                    signIn();
+                                     signIn();
                                     //Navigator.push(context, MaterialPageRoute(builder: (context) => SideBarLayout()));
                                   },
                                   child: Center(
@@ -229,11 +229,8 @@ class _LoginPageState extends State<LoginPage> {
    if (formstate.validate()) {
      formstate.save();
 
-    // FirebaseUser user = await FirebaseAuth.instance.currentUser();
-
        try {
-         FirebaseUser user = (await firebaseAuth
-             .signInWithEmailAndPassword(email: lEmail, password: lPassword)).user;
+         FirebaseUser user = (await firebaseAuth.signInWithEmailAndPassword(email: lEmail, password: lPassword)).user;
 
          if(!user.isEmailVerified){
            Fluttertoast.showToast(
@@ -246,9 +243,8 @@ class _LoginPageState extends State<LoginPage> {
                fontSize: 16.0
            );
          }else {
-           Navigator.push(context, MaterialPageRoute(
-               builder: (context) => SideBarLayout(user: user)));
-           //Navigator.push(context, MaterialPageRoute(builder: (context) => UserData(user: user)));
+           Navigator.push(context, MaterialPageRoute(builder: (context) => SideBarLayout(user: user)));
+           //Navigator.push(context, MaterialPageRoute(builder: (context) => MyAccountsPage(user: user)));
          }
        } catch (e) {
          Fluttertoast.showToast(

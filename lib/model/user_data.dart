@@ -42,4 +42,3 @@ class UserData extends StatelessWidget {
     );
   }
 }
-

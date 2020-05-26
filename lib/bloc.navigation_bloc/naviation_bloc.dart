@@ -1,27 +1,30 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../pages/myaccountspage.dart';
 import '../pages/homepage.dart';
 
 enum NavigationEvents {
   HomePageClickedEvent,
   MyAccountClickedEvent,
-  MyOrdersClickedEvent,
 }
 
-abstract class NavigationStates {}
+abstract class NavigationStates{}
 
-class NavigationBloc extends Bloc<NavigationEvents, NavigationStates> {
+class NavigationBloc extends Bloc<NavigationEvents, NavigationStates>{
+  final FirebaseUser user;
+  NavigationBloc(this.user);
+
   @override
-  NavigationStates get initialState => HomePage();
+  NavigationStates get initialState => HomePage(user: user);
 
   @override
   Stream<NavigationStates> mapEventToState(NavigationEvents event) async* {
     switch (event) {
       case NavigationEvents.HomePageClickedEvent:
-        yield HomePage();
+        yield HomePage(user: user);
         break;
       case NavigationEvents.MyAccountClickedEvent:
-        yield MyAccountsPage();
+        yield MyAccountsPage(user: user);
         break;
     }
   }
