@@ -2,13 +2,15 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nuelitoexpress/bloc/cartlistBloc.dart';
 import 'package:nuelitoexpress/bloc/listTileColorBloc.dart';
 import 'package:nuelitoexpress/model/food_item.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:nuelitoexpress/pages/homepage.dart';
+
+
 
 class Cart extends StatelessWidget {
   Cart({Key key, this.user}) : super(key: key);
@@ -31,7 +33,6 @@ class Cart extends StatelessWidget {
           );
         } else {
           return Container(
-            child: Text("Algo retorna Null"),
           );
         }
       },
@@ -39,7 +40,7 @@ class Cart extends StatelessWidget {
   }
 }
 
-class BottomBar extends StatelessWidget {
+class BottomBar extends StatelessWidget{
   final FirebaseUser user;
   final List<FoodItem> foodItems;
   final firestoreInstance = Firestore.instance;
@@ -49,7 +50,6 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-
       margin: EdgeInsets.only(left: 35, bottom: 25),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -100,7 +100,8 @@ class BottomBar extends StatelessWidget {
         onTap: () {
           print("Hola");
           returnCart();
-    },
+          CustomAppBar();
+          },
       child: Row(
         children: <Widget>[
           Text(
@@ -133,7 +134,17 @@ class BottomBar extends StatelessWidget {
     _longitude = "${position.longitude}";
   }
 
-  Future<String>returnCart() async{
+  String userName;
+  String userPhone;
+  Future<String> returnDataUser() async {
+    firestoreInstance.collection("Usuarios").document(user.uid).get().then((value){
+
+      userName = value.data['Nombre'];
+      userPhone = value.data['Telefono'];
+    });
+  }
+
+  Future<void>returnCart() async{
     List<String> productsFB = new List();
     String cartFB;
     for (int i = 0; i < foodItems.length; i++) {
@@ -141,12 +152,14 @@ class BottomBar extends StatelessWidget {
           foodItems[i].quantity.toString() + " x " + foodItems[i].title + "\n";
       productsFB.add(cartFB);
     }
+
+    returnDataUser();
     returnLocation();
-    if (_latitude != null && _longitude != null){
-      firestoreInstance.collection('Pedidos').add({
-        //'Nombre': snapshot.data['Nombre'],
-        //'Telefono': snapshot.data['Telefono'],
-        'Productos': productsFB,
+    if (_latitude != null && _longitude != null ){
+        firestoreInstance.collection('Pedidos').add({
+        'Nombre': userName,
+        'Telefono': userPhone,
+        'Productos': productsFB.toString(),
         'Total': returnTotalAmount(foodItems),
         'Longitud': _longitude,
         'Latitud': _latitude,
@@ -160,12 +173,11 @@ class BottomBar extends StatelessWidget {
           textColor: Colors.white,
           fontSize: 16.0
       );
-      ///
     } else {
       Fluttertoast.showToast(
           msg: "Hubo un problema con localizar tu ubicacion, intenta de nuevo.",
           toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
+          gravity: ToastGravity.TOP,
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
@@ -174,6 +186,9 @@ class BottomBar extends StatelessWidget {
     }
   }
 }
+/*Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => HomePageBuild(user)));*/
+
 
 class CartBody extends StatelessWidget {
   final List<FoodItem> foodItems;
@@ -364,7 +379,7 @@ class ItemContent extends StatelessWidget {
                 ]),
           ),
           Text(
-            "\Q${foodItem.quantity * foodItem.price}",
+            "\Q${foodItem.quantity * foodItem.price}"+"0",
             style:
                 TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
           ),
@@ -442,3 +457,4 @@ class _DragTargetWidgetState extends State<DragTargetWidget> {
     );
   }
 }
+

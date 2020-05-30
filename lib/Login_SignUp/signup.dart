@@ -11,7 +11,6 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-
   String sEmail, sPassword, sNombre, sTelefono;
   GlobalKey<FormState> formkey = GlobalKey();
   final firestoreInstance = Firestore.instance;
@@ -123,23 +122,6 @@ class _SignupPageState extends State<SignupPage> {
                                     obscureText: true,
                                     validator: (value) => value.isEmpty ? '*Campo Obligatorio' : null,
                                     onSaved: (value)=> sPassword = value,
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      border: Border(bottom: BorderSide(color: Colors.grey[200]))
-                                  ),
-                                  child:  TextFormField(
-                                    decoration: InputDecoration(
-                                        labelText: 'Confirmar contraseña',
-                                        labelStyle: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey),
-                                        focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.orange))),
-                                    obscureText: true,
                                   ),
                                 ),
                                 Container(

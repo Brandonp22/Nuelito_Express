@@ -169,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                                 elevation: 7.0,
                                 child: InkWell(
                                   onTap: () {
-                                     signIn();
+                                    signIn();
                                     //Navigator.push(context, MaterialPageRoute(builder: (context) => SideBarLayout()));
                                   },
                                   child: Center(

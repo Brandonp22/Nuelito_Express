@@ -7,7 +7,7 @@ import 'package:nuelitoexpress/bloc/listTileColorBloc.dart';
 import 'cart.dart';
 import 'package:nuelitoexpress/model/food_item.dart';
 
-var nameList = fooditemList;
+var nameList = restaurantList;
 class HomePage extends StatelessWidget with NavigationStates{
   final FirebaseUser user;
   const HomePage({Key key, this.user}) : super(key: key);
@@ -135,26 +135,50 @@ class categories extends StatelessWidget {
         children: <Widget>[
           InkWell(
             onTap: () {
-              nameList = fooditemList;
+              nameList = restaurantList;
               Navigator.of(context).pushNamed('/refresh');
             },
             child: CategoryListItem(
-              imgUrl:
-              "https://firebasestorage.googleapis.com/v0/b/nuelito-927e8.appspot.com/o/FotosNegocios%2Fsubwayr-restaurants-reveals-bold-new-logo-and-symbol-null-hr.jpg?alt=media&token=f0f84c31-1572-4296-ab6b-20c177ff4475",
-              categoryName: "Subway",
+              categoryIcon: Icons.restaurant,
+              categoryName: "Restaurantes",
               selected: false,
+              availability: 6,
             ),),
 
           InkWell(
             onTap: () {
-              nameList = fooditemListdos;
+              nameList = fastFoodList;
               Navigator.of(context).pushNamed('/refresh');
             },
             child: CategoryListItem(
-              imgUrl:
-              "https://firebasestorage.googleapis.com/v0/b/nuelito-927e8.appspot.com/o/FotosNegocios%2Fsubwayr-restaurants-reveals-bold-new-logo-and-symbol-null-hr.jpg?alt=media&token=f0f84c31-1572-4296-ab6b-20c177ff4475",
-              categoryName: "Mc Donald",
+              categoryIcon: Icons.fastfood,
+              categoryName: "Comida Rápida",
               selected: false,
+              availability: 6,
+            ),),
+
+          InkWell(
+            onTap: () {
+              nameList = cafeList;
+              Navigator.of(context).pushNamed('/refresh');
+            },
+            child: CategoryListItem(
+              categoryIcon: Icons.local_cafe,
+              categoryName: "Cafeterias",
+              selected: false,
+              availability: 6,
+            ),),
+
+          InkWell(
+            onTap: () {
+              nameList = pizzaList;
+              Navigator.of(context).pushNamed('/refresh');
+            },
+            child: CategoryListItem(
+              categoryIcon: Icons.local_pizza,
+              categoryName: "Pizzerias",
+              selected: false,
+              availability: 6,
             ),),
         ],
       ),
@@ -229,7 +253,7 @@ class Items extends StatelessWidget {
                                     fontSize: 18,
                                   )),
                             ),
-                            Text("\Q$itemPrice",
+                            Text("\Q$itemPrice"+"0",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 18,
@@ -265,13 +289,15 @@ class Items extends StatelessWidget {
 class CategoryListItem extends StatelessWidget {
   const CategoryListItem({
     Key key,
-    @required this.imgUrl,
+    @required this.categoryIcon,
     @required this.categoryName,
+    @required this.availability,
     @required this.selected,
   }) : super(key: key);
 
-  final String imgUrl;
+  final IconData categoryIcon;
   final String categoryName;
+  final int availability;
   final bool selected;
 
   @override
@@ -305,30 +331,31 @@ class CategoryListItem extends StatelessWidget {
                 border: Border.all(
                     color: selected ? Colors.transparent : Colors.grey[200],
                     width: 1.5)),
-              child: Image.network(
-                imgUrl,
-                fit: BoxFit.fill,
-                height: 30,
-              ),
+            child: Icon(
+              categoryIcon,
+              color: Colors.black,
+              size: 30,
             ),
-          /*Container(
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(
-                    color: selected ? Colors.transparent : Colors.grey[200],
-                    width: 1.5)),
-            child: Image.network(
-              imgUrl,
-            ),
-          ),*/
+          ),
           SizedBox(height: 10),
           Text(
             categoryName,
             style: TextStyle(
                 fontWeight: FontWeight.w700, color: Colors.black, fontSize: 15),
           ),
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 6, 0, 10),
+            width: 1.5,
+            height: 15,
+            color: Colors.black26,
+          ),
+          Text(
+            availability.toString(),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          )
         ],
       ),
     );
